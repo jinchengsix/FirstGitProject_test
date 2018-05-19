@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <!-- spring的配置文件-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- 防止Spring内存溢出监听器  -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+
+    <!--以下配置的加载顺序:先 ServletContext >> context-param >> listener >> filter >> servlet >>  spring-->
+
+    <!---过滤器配置-->
+    <!--例:编码过滤器-->
+    <!--<filter>      &lt;!&ndash; 用来声明filter的相关设定,过滤器可以截取和修改一个Servlet或JSP页面的请求或从一个Servlet或JSP页面发出的响应&ndash;&gt;-->
+        <!--<filter-name>encodingFilter</filter-name>     &lt;!&ndash;指定filter的名字&ndash;&gt;-->
+        <!--<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> &lt;!&ndash;定义filter的类的名称&ndash;&gt;-->
+        <!--<async-supported>true</async-supported>     &lt;!&ndash;设置是否启用异步支持&ndash;&gt;-->
+        <!--<init-param>&lt;!&ndash;用来定义参数,若在Servlet可以使用下列方法来获得:String param_name=getServletContext().getInitParamter("param-name里面的值");&ndash;&gt;-->
+            <!--<param-name>encoding</param-name>   &lt;!&ndash;参数名称&ndash;&gt;-->
+            <!--<param-value>UTF-8</param-value> &lt;!&ndash;参数值&ndash;&gt;-->
+        <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>&lt;!&ndash;用来定义filter所对应的URL&ndash;&gt;-->
+        <!--<filter-name>encodingFilter</filter-name>     &lt;!&ndash;指定对应filter的名字&ndash;&gt;-->
+        <!--<url-pattern>/*</url-pattern>       &lt;!&ndash;指定filter所对应的URL&ndash;&gt;-->
+    <!--</filter-mapping>-->
+
+
+    <!-- spring mvc核心：分发servlet -->
+    <servlet>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- spring mvc的配置文件 -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/springmvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+
+
+    <!---会话超时配置（单位为分钟）-->
+    <session-config><!--如果某个会话在一定时间未被访问，则服务器可以扔掉以节约内存-->
+        <session-timeout>120</session-timeout>
+    </session-config>
+    <!---MIME类型配置   -->
+    <!--<mime-mapping>&lt;!&ndash;设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开&ndash;&gt;-->
+    <!--<extension>*.ppt</extension>            &lt;!&ndash;扩展名名称&ndash;&gt;-->
+    <!--<mime-type>application/mspowerpoint</mime-type>         &lt;!&ndash;MIME格式&ndash;&gt;-->
+    <!--</mime-mapping>-->
+    <!--欢迎页面配置-->
+    <welcome-file-list><!--定义首页列单.-->
+        <welcome-file>/index.jsp</welcome-file> <!--用来指定首页文件名称.我们可以用<welcome-file>指定几个首页,而服务器会依照设定的顺序来找首页.-->
+        <welcome-file>/index.html</welcome-file>
+    </welcome-file-list>
+    <!--&lt;!&ndash;配置错误页面&ndash;&gt;-->
+    <!--<error-page>  &lt;!&ndash;将错误代码(Error Code)或异常(Exception)的种类对应到web应用资源路径.&ndash;&gt;-->
+    <!--<error-code>404</error-code>        &lt;!&ndash;HTTP Error code,例如: 404、403&ndash;&gt;-->
+    <!--<location>error.html</location>         &lt;!&ndash;用来设置发生错误或异常时要显示的页面&ndash;&gt;-->
+    <!--</error-page>-->
+    <!--<error-page>-->
+    <!--<exception-type>java.lang.Exception</exception-type>&lt;!&ndash;设置可能会发生的java异常类型,例如:java.lang.Exception&ndash;&gt;-->
+    <!--<location>ExceptionError.html</location>            &lt;!&ndash;用来设置发生错误或异常时要显示的页面&ndash;&gt;-->
+    <!--</error-page>-->
+</web-app>
